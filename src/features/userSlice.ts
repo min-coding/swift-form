@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-// import { RootState, AppThunk } from "../app/store"
-// import { fetchCount } from "./counterAPI"
+import { nanoid } from "nanoid"
 
 export interface UserState {
+  id: string
   title: string
   firstname: string
   lastname: string
-  birthdate: Date
+  birthdate: string
   nationality: string
   id_number: string | null
   gender: string
@@ -17,61 +17,50 @@ export interface UserState {
 }
 
 const initialState = {
-  title: localStorage.getItem("title") || "",
-  firstname: localStorage.getItem("firstname") || "",
-  lastname: localStorage.getItem("lastname") || "",
-  birthdate: new Date(),
-  nationality: localStorage.getItem("nationality") || "",
-  id_number: localStorage.getItem("id_number") || "",
-  gender: localStorage.getItem("gender") || "",
-  mobile_number: localStorage.getItem("mobile_number") || "",
-  passport_number: localStorage.getItem("passport_number") || "",
-  expected_salary: Number(localStorage.getItem("expected_salary")) || 0,
+  id: "",
+  title: "",
+  firstname: "",
+  lastname: "",
+  birthdate: "",
+  nationality: "",
+  id_number: "",
+  gender: "",
+  mobile_number: "",
+  passport_number: "",
+  expected_salary: 0,
   isValid: false,
-  // user: {
-  //   user: localStorage.getItem("user")? JSON.parse(localStorage.getItem("user"))
-  //     : [],
-  // }
 }
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    updateUser: (state, action: PayloadAction<Partial<UserState>>) => {
+    updateUserForm: (state, action: PayloadAction<Partial<UserState>>) => {
       //check isValid after every input
       function checkValid() {
-        const {
-          title,
-          firstname,
-          lastname,
-          nationality,
-          gender,
-          // mobile_number,
-          // passport_number,
-          // id_number,
-          expected_salary,
-        } = state
-
         state.isValid =
-          title.length > 0 &&
-          firstname.length > 0 &&
-          lastname.length > 0 &&
-          nationality.length > 0 &&
-          gender.length > 0 &&
-          // mobile_number.length > 0 &&
-          // passport_number.length > 0 &&
-          // id_number.length > 0 &&
-          expected_salary > 0
+          state.title.length > 0 &&
+          state.firstname.length > 0 &&
+          state.lastname.length > 0 &&
+          state.birthdate.length > 0 &&
+          state.nationality.length > 0 &&
+          state.gender.length > 0 &&
+          state.mobile_number.length > 0 &&
+          state.expected_salary > 0
       }
-      Object.assign(state, action.payload)
+
+      state.id = nanoid()
+      if (action.payload.birthdate) {
+        state.birthdate = action.payload.birthdate.toString() // Convert Date to ISO string
+      }
       checkValid()
+      Object.assign(state, action.payload)
     },
-    resetUser: (state) => {
+    resetUserForm: (state) => {
       state = initialState
     },
   },
 })
 
-export const { updateUser, resetUser } = userSlice.actions
+export const { updateUserForm, resetUserForm } = userSlice.actions
 export default userSlice.reducer

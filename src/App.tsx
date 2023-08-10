@@ -1,16 +1,35 @@
-import logo from "./logo.svg"
-import { Counter } from "./features/counter/Counter"
 import "./App.css"
-import Form from "./Form"
+import UserForm from "./Form"
+import UserTable from "./UserTable"
+import { useEffect, useState } from "react"
+import { Layout, Space } from "antd"
+import { Header, Content, Footer } from "antd/es/layout/layout"
 
 function App() {
+  const [users, setUsers] = useState(
+    JSON.parse(localStorage.getItem("users")!) || [],
+  )
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {/* <Counter /> */}
-        <Form></Form>
-      </header>
+      <Space
+        direction="vertical"
+        style={{
+          width: "100%",
+        }}
+      >
+        <Layout style={{ background: "transparent" }}>
+          <Header style={{ background: "transparent" }}>Manage Form</Header>
+          <div className="form">
+            <Content style={{ background: "transparent" }}>
+              <UserForm users={users} setUsers={setUsers}></UserForm>
+            </Content>
+          </div>
+          <Footer style={{ background: "transparent" }}>
+            <UserTable users={users} setUsers={setUsers}></UserTable>
+          </Footer>
+        </Layout>
+      </Space>
     </div>
   )
 }

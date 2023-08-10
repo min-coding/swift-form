@@ -1,75 +1,88 @@
-import React, { ChangeEventHandler, useEffect, useState } from "react"
 import PhoneInput from "react-phone-number-input"
+import "./App.css"
 import { useAppDispatch, useAppSelector } from "./app/hooks"
 import { RootState } from "./app/store"
-import { updateUser, resetUser } from "./features/userSlice"
+import { updateUserForm, resetUserForm } from "./features/userSlice"
 
-// type Props = {}
-//export default function Form({}: Props) {
-
-export default function Form() {
+export default function UserForm({ users, setUsers }) {
   const user = useAppSelector((state: RootState) => state.user)
   const dispatch = useAppDispatch()
 
-  // useEffect(() => {
-  //   validateForm()
-  // },[user])
+  function handleSubmit(e) {
+    e.preventDefault()
+    if (user.isValid) {
+      const updatedUsers = [...users, user]
+      setUsers(updatedUsers)
 
-  //validate form
-  // const [isValid, setIsValid] = useState(false)
-
-  function handleSubmit() {
-    if (user.isValid) localStorage.setItem("user", JSON.stringify(user))
-    else alert("Please fill out all the required form")
+      localStorage.setItem("users", JSON.stringify(updatedUsers))
+      dispatch(resetUserForm())
+    } else alert("Please fill out all the required form")
   }
 
   return (
     <form>
-      <label htmlFor="title"> Title:</label>
+      <label className="required" htmlFor="title">
+        {" "}
+        Title:
+      </label>
       <select
         id="title"
         name="title"
         required
-        onChange={(e) => dispatch(updateUser({ title: e.target.value }))}
+        onChange={(e) => dispatch(updateUserForm({ title: e.target.value }))}
       >
         <option value="">-- Title--</option>
         <option value="Mr">Mr</option>
         <option value="Mrs">Mrs</option>
         <option value="Ms">Ms</option>
       </select>
-      <label htmlFor="firstname">Firstname:</label>
+      <label className="required" htmlFor="firstname">
+        Firstname:
+      </label>
       <input
         type="text"
         id="firstname"
         name="firstname"
         required
-        onChange={(e) => dispatch(updateUser({ firstname: e.target.value }))}
+        onChange={(e) =>
+          dispatch(updateUserForm({ firstname: e.target.value }))
+        }
       ></input>
 
-      <label htmlFor="lastname">Lastname:</label>
+      <label className="required" htmlFor="lastname">
+        Lastname:
+      </label>
       <input
         type="text"
         id="lastname"
         name="lastname"
         required
-        onChange={(e) => dispatch(updateUser({ lastname: e.target.value }))}
+        onChange={(e) => dispatch(updateUserForm({ lastname: e.target.value }))}
       ></input>
 
-      {/* <label htmlFor="birthdate">Birthdate:</label>
+      <label className="required" htmlFor="birthdate">
+        Birthdate:
+      </label>
       <input
         type="date"
         id="birthdate"
         name="birthdate"
         required
-        onChange={(e) => dispatch(updateUser({ birthdate: e.target.value }))}
-      ></input> */}
+        onChange={(e) =>
+          dispatch(updateUserForm({ birthdate: e.target.value }))
+        }
+      ></input>
 
-      <label htmlFor="nationality">Nationality:</label>
+      <label className="required" htmlFor="nationality">
+        Nationality:
+      </label>
       <select
         id="nationality"
         name="nationality"
         required
-        onChange={(e) => dispatch(updateUser({ nationality: e.target.value }))}
+        onChange={(e) =>
+          dispatch(updateUserForm({ nationality: e.target.value }))
+        }
       >
         <option value="">-- select one --</option>
         <option value="afghan">Afghan</option>
@@ -273,17 +286,21 @@ export default function Form() {
         type="text"
         id="id_number"
         name="id_number"
-        onChange={(e) => dispatch(updateUser({ id_number: e.target.value }))}
+        onChange={(e) =>
+          dispatch(updateUserForm({ id_number: e.target.value }))
+        }
       ></input>
 
-      <label htmlFor="gender">Gender:</label>
+      <label className="required" htmlFor="gender">
+        Gender:
+      </label>
       <input
         type="radio"
         id="male"
         name="gender"
         value="Male"
         required
-        onChange={(e) => dispatch(updateUser({ gender: e.target.value }))}
+        onChange={(e) => dispatch(updateUserForm({ gender: e.target.value }))}
       ></input>
       <label htmlFor="male">Male</label>
       <input
@@ -292,7 +309,7 @@ export default function Form() {
         name="gender"
         value="Female"
         required
-        onChange={(e) => dispatch(updateUser({ gender: e.target.value }))}
+        onChange={(e) => dispatch(updateUserForm({ gender: e.target.value }))}
       ></input>
       <label htmlFor="female">Female</label>
       <input
@@ -301,34 +318,47 @@ export default function Form() {
         name="gender"
         value="Other"
         required
-        onChange={(e) => dispatch(updateUser({ gender: e.target.value }))}
+        onChange={(e) => dispatch(updateUserForm({ gender: e.target.value }))}
       ></input>
       <label htmlFor="other">Other</label>
 
-      {/* <PhoneInput onChange={}></PhoneInput> */}
+      <label className="required" htmlFor="mobile_number">
+        Mobile number
+      </label>
+      <input
+        type="text"
+        id="mobile_number"
+        name="mobile_number"
+        onChange={(e) =>
+          dispatch(updateUserForm({ mobile_number: e.target.value }))
+        }
+      ></input>
       <label htmlFor="passport_number">Passport Number:</label>
       <input
         type="text"
         id="passport_number"
         name="passport_number"
         onChange={(e) =>
-          dispatch(updateUser({ passport_number: e.target.value }))
+          dispatch(updateUserForm({ passport_number: e.target.value }))
         }
       ></input>
 
-      <label htmlFor="expected_salary">Expected Salary:</label>
+      <label className="required" htmlFor="expected_salary">
+        Expected Salary:
+      </label>
       <input
         type="number"
         id="expected_salary"
         name="expected_salary"
+        required
         onChange={(e) =>
-          dispatch(updateUser({ expected_salary: Number(e.target.value) }))
+          dispatch(updateUserForm({ expected_salary: Number(e.target.value) }))
         }
       ></input>
       <button type="submit" onClick={handleSubmit} disabled={!user.isValid}>
         Submit data
       </button>
-      <button type="reset" onClick={(e) => dispatch(resetUser())}>
+      <button type="reset" onClick={() => dispatch(resetUserForm())}>
         {" "}
         Clear form{" "}
       </button>
