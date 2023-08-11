@@ -1,7 +1,15 @@
 import { Table, Button } from "antd"
 import { useState } from "react"
+import { UserState } from "./features/userSlice"
+import { Key } from "antd/es/table/interface"
 
-export default function UserTable({ users, setUsers }) {
+export default function UserTable({
+  users,
+  setUsers,
+}: {
+  users: UserState[]
+  setUsers: React.Dispatch<React.SetStateAction<UserState[] | null>>
+}) {
   function removeUser() {
     const updatedUsers = users.filter(
       (user) => !selectedRowKeys.includes(user.id),
@@ -10,9 +18,9 @@ export default function UserTable({ users, setUsers }) {
     localStorage.setItem("users", JSON.stringify(updatedUsers))
     setSelectedRowKeys([])
   }
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
 
-  const onSelectChange = (newSelectedRowKeys) => {
+  const onSelectChange = (newSelectedRowKeys: Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys)
   }
 
@@ -27,7 +35,8 @@ export default function UserTable({ users, setUsers }) {
       dataIndex: "firstname",
       key: "firstname",
       sorter: {
-        compare: (a, b) => a.firstname.localeCompare(b.firstname),
+        compare: (a: UserState, b: UserState) =>
+          a.firstname.localeCompare(b.firstname),
         multiple: 4,
       },
     },
@@ -36,7 +45,8 @@ export default function UserTable({ users, setUsers }) {
       dataIndex: "gender",
       key: "gender",
       sorter: {
-        compare: (a, b) => a.gender.localeCompare(b.gender),
+        compare: (a: UserState, b: UserState) =>
+          a.gender.localeCompare(b.gender),
         multiple: 3,
       },
     },
@@ -45,7 +55,8 @@ export default function UserTable({ users, setUsers }) {
       dataIndex: "mobile_number",
       key: "mobile_number",
       sorter: {
-        compare: (a, b) => a.mobile_number.localeCompare(b.mobile_number),
+        compare: (a: UserState, b: UserState) =>
+          a.mobile_number.localeCompare(b.mobile_number),
         multiple: 2,
       },
     },
@@ -55,16 +66,19 @@ export default function UserTable({ users, setUsers }) {
       dataIndex: "nationality",
       key: "nationality",
       sorter: {
-        compare: (a, b) => a.nationality.localeCompare(b.nationality),
+        compare: (a: UserState, b: UserState) =>
+          a.nationality.localeCompare(b.nationality),
         multiple: 1,
       },
     },
   ]
   return (
     <>
-      <div>This is a table</div>
-
-      <Button type="primary" onClick={removeUser}>
+      <Button
+        type="primary"
+        onClick={removeUser}
+        style={{ marginBottom: "2em" }}
+      >
         Remove
       </Button>
       <span
@@ -85,5 +99,3 @@ export default function UserTable({ users, setUsers }) {
     </>
   )
 }
-
-// const App = () => <Table columns={columns} dataSource={data} />;

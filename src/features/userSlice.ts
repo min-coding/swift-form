@@ -13,7 +13,6 @@ export interface UserState {
   mobile_number: string
   passport_number: string | null
   expected_salary: number
-  isValid: boolean
 }
 
 const initialState = {
@@ -28,7 +27,6 @@ const initialState = {
   mobile_number: "",
   passport_number: "",
   expected_salary: 0,
-  isValid: false,
 }
 
 export const userSlice = createSlice({
@@ -36,28 +34,14 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateUserForm: (state, action: PayloadAction<Partial<UserState>>) => {
-      //check isValid after every input
-      function checkValid() {
-        state.isValid =
-          state.title.length > 0 &&
-          state.firstname.length > 0 &&
-          state.lastname.length > 0 &&
-          state.birthdate.length > 0 &&
-          state.nationality.length > 0 &&
-          state.gender.length > 0 &&
-          state.mobile_number.length > 0 &&
-          state.expected_salary > 0
-      }
-
       state.id = nanoid()
       if (action.payload.birthdate) {
-        state.birthdate = action.payload.birthdate.toString() // Convert Date to ISO string
+        state.birthdate = action.payload.birthdate.toString()
       }
-      checkValid()
       Object.assign(state, action.payload)
     },
-    resetUserForm: (state) => {
-      state = initialState
+    resetUserForm: () => {
+      return initialState
     },
   },
 })

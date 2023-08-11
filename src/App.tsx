@@ -1,7 +1,7 @@
 import "./App.css"
 import UserForm from "./Form"
 import UserTable from "./UserTable"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Layout, Space } from "antd"
 import { Header, Content, Footer } from "antd/es/layout/layout"
 
@@ -20,7 +20,7 @@ function App() {
       >
         <Layout style={{ background: "transparent" }}>
           <Header style={{ background: "transparent" }}>Manage Form</Header>
-          <div className="form">
+          <div className="form-container">
             <Content style={{ background: "transparent" }}>
               <UserForm users={users} setUsers={setUsers}></UserForm>
             </Content>
